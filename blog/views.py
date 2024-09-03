@@ -1,32 +1,34 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from .models import Post
+from django.contrib.auth.decorators import login_required
+from django.views.generic import ListView, DetailView
 
-posts = [
-    {
-        "author": "John Doe",
-        "title": "Django",
-        "date_posted": "Aug 22 2024",
-        "content":"Django is nice"
-    },
-    {
-        "author": "Jane Doe",
-        "title": "React",
-        "date_posted": "Aug 22 2024",
-        "content":"React is nice"
-    },
-    {
-        "author": "Dan Doe",
-        "date_posted": "Aug 22 2024",
-        "content":"Java is nice"
-    }
-]
-def home(requests):
-    print("Hello, this is the home page")
-    context = {
-        "posts": posts,
-        "title": "Blog Post"
-    }
-    return render(requests, "blog/home.html", context)
+
+
+# @login_required
+# def home(requests):
+#     posts = Post.objects.all()
+#     context = {
+#         "posts": posts
+#     }
+#     return render(requests, "blog/home.html", context)
+
+class PostListView(ListView):
+    model = Post
+    template_name = "blog/home.html"
+    context_object_name = "posts"
+
+class PostDetailView(DetailView):
+    model = Post
+
+# def postDetail(request, pk):
+#     print(pk)
+#     post = Post.objects.filter(pk=pk).first()
+
+#     return render(request, "blog/post_detail.html", {"post": post})
+
+def createPost(request):
+    pass
 
 def about(requests):
     return render(requests, "blog/about.html")
